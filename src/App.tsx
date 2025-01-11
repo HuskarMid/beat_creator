@@ -63,8 +63,6 @@ const TimeBarContentItem = styled.div`
   }
 `;
 
-// Buttons
-
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -277,7 +275,6 @@ const WaveformCanvas = styled.canvas<{
   height: 100%;
 `;
 
-// Обновляем интерфейс Note
 interface Note {
   id: number;
   time: number;
@@ -287,7 +284,6 @@ interface Note {
   pitch: number;
 }
 
-// Добавляем новые styled-components для контекстного меню
 const ContextMenu = styled.div`
   position: fixed;
   background: #2C2C2C;
@@ -308,7 +304,6 @@ const MenuItem = styled.div`
   }
 `;
 
-// Добавляем новые styled-components для модального окна
 const NotesEditModal = styled.div`
   position: fixed;
   top: 50%;
@@ -537,7 +532,6 @@ const InstrumentsMelodyList = styled.div`
 
 `;
 
-// Добавляем новый styled-component для строки мелодии
 const InstrumentsMelodyItem = styled(InstrumentItem)`
   height: 54px;
   background-color: #2C2C2C;
@@ -627,7 +621,6 @@ const DropdownItem = styled.div`
   }
 `;
 
-// Добавляем новый styled-component для MelodyTab
 const AudioTab = styled.div<{ $position: number; $width: number }>`
   position: absolute;
   height: 70%;
@@ -658,13 +651,12 @@ const AudioTab = styled.div<{ $position: number; $width: number }>`
   }
 `;
 
-// Добавляем новые styled-components перед BottomBarSection
 const MelodySection = styled.div`
   width: 100%;
   background-color: #2C2C2C;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
-  position: relative; // Добавляем для позиционирования timeline
+  position: relative; 
 `;
 
 const MelodyRow = styled.div`
@@ -674,8 +666,7 @@ const MelodyRow = styled.div`
   border-bottom: 1px solid black;
   display: flex;
   position: relative;
-  
-  // Добавляем стили для зоны перетаскивания
+
   & > div {
     width: 100%;
     height: 100%;
@@ -683,7 +674,6 @@ const MelodyRow = styled.div`
   }
 `;
 
-// Добавляем новые styled-components для модального окна изменения мелодии
 const ChangeMelodyModal = styled.div`
   position: fixed;
   top: 50%;
@@ -766,7 +756,7 @@ function App() {
       path: AvailableMelodies[2].path,
       type: "melody",
       duration: 0,
-      volume: 50, // Меняем velocity на volume
+      volume: 50,
       bars: [
         {
           id: 1,
@@ -789,7 +779,7 @@ function App() {
         "path": "/sounds/FullKick_07_641.wav",
         "pitch": 0,
         "type": "midi",
-        "volume": 50, // Меняем velocity на volume
+        "volume": 50,
         "bars": [
             {
                 "id": 1,
@@ -904,7 +894,7 @@ function App() {
         "path": "/sounds/909Clap_02_146_SP.wav",
         "pitch": 0,
         "type": "midi",
-        "volume": 50, // Меняем velocity на volume
+        "volume": 50,
         "bars": [
             {
                 "id": 4,
@@ -991,7 +981,7 @@ function App() {
         "path": "/sounds/33_HiHat_SP_42_55.wav",
         "pitch": 0,
         "type": "midi",
-        "volume": 50, // Меняем velocity на volume
+        "volume": 50,
         "bars": [
             {
                 "id": 1,
@@ -1253,7 +1243,6 @@ function App() {
   const [melodyPlayers, setMelodyPlayers] = useState<{[key: string]: Tone.Player}>({});
   const [samplesLoaded, setSamplesLoaded] = useState(false);
 
-  // Добавляем состояния для контекстного меню
   const [contextMenu, setContextMenu] = useState({
     visible: false,
     x: 0,
@@ -1270,13 +1259,10 @@ function App() {
     notes: []
   });
 
-  // Добавляем новое состояние для хранения скопированного такта
   const [copiedBar, setCopiedBar] = useState(null);
 
-  // В компоненте App добавляем новое состояние
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // В компоненте App добавляем состояние для анимации
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [dropdownAnimating, setDropdownAnimating] = useState(false);
 
@@ -1289,11 +1275,10 @@ function App() {
         if (!dropdownVisible) {
           setIsDropdownOpen(false);
         }
-      }, 200); // Время анимации
+      }, 200);
     }
   };
 
-  // Добавляем новый интерфейс для контекстного меню мелодии
   const [melodyContextMenu, setMelodyContextMenu] = useState({
     visible: false,
     x: 0,
@@ -1302,7 +1287,6 @@ function App() {
     barId: null
   });
 
-  // Добавляем обработчик контекстного меню для MelodyTab
   const handleMelodyContextMenu = (e: React.MouseEvent, melodyId: number, barId: number) => {
     e.preventDefault(); // Предотвращаем появление браузерного меню
     
@@ -1315,12 +1299,10 @@ function App() {
     });
   };
 
-  // Добавляем обработчик закрытия контекстного меню мелодии
   const handleCloseMelodyContextMenu = () => {
     setMelodyContextMenu(prev => ({ ...prev, visible: false }));
   };
 
-  // Обновляем обработчик дублирования
   const handleDuplicateMelodyBar = () => {
     if (melodyContextMenu.melodyId === null || melodyContextMenu.barId === null) return;
 
@@ -1335,24 +1317,21 @@ function App() {
           const originalBar = melody.bars.find(bar => bar.id === melodyContextMenu.barId);
           if (!originalBar) return melody;
 
-          // Вычисляем количество тактов, которые занимает оригинальный AudioTab
           const barsNeeded = Math.ceil(melody.duration / barDurationInSeconds);
 
           const maxBarId = Math.max(0, ...prevList.flatMap(m => m.bars.map(b => b.id)));
           const newBar = {
             ...originalBar,
             id: maxBarId + 1,
-            time: originalBar.time + barsNeeded // Устанавливаем позицию после всех тактов оригинала
+            time: originalBar.time + barsNeeded 
           };
 
-          // Создаем новый плеер для дубликата
           const newPlayer = new Tone.Player(melody.path).toDestination();
           setMelodyPlayers(prev => ({
             ...prev,
             [melody.id]: newPlayer
           }));
 
-          // Добавляем setTimeout для визуализации после рендеринга
           setTimeout(() => {
             visualizeMelody(melody.path, `melody-waveform-${melody.id}-${newBar.id}`);
           }, 100);
@@ -1370,13 +1349,11 @@ function App() {
 
     handleCloseMelodyContextMenu();
 
-    // Возобновляем воспроизведение, если оно было активно
     if (wasPlaying) {
       setTimeout(handlePlay, 100);
     }
   };
 
-  // Добавляем обработчик удаления мелодии
   const handleDeleteMelodyBar = () => {
     if (melodyContextMenu.melodyId === null || melodyContextMenu.barId === null) return;
 
@@ -1395,7 +1372,6 @@ function App() {
     handleCloseMelodyContextMenu();
   };
 
-  // Добавляем эффект для закрытия меню при клике вне его
   React.useEffect(() => {
     const handleClickOutside = () => handleCloseMelodyContextMenu();
     if (melodyContextMenu.visible) {
@@ -1412,7 +1388,6 @@ function App() {
         const loadedSamples = {};
         const loadedMelodyPlayers = {};
 
-        // Загрузка MIDI сэмплов
         for (const instrument of midiList) {
           try {
             if (!samples[instrument.id]) {
@@ -1426,7 +1401,6 @@ function App() {
           }
         }
 
-        // Загрузка мелодий
         for (const melody of melodyList) {
           try {
             if (!melodyPlayers[melody.id]) {
@@ -1449,7 +1423,7 @@ function App() {
       }
     };
     loadSamples();
-  }, [midiList, melodyList]); // Обновляем зависимости
+  }, [midiList, melodyList]);
 
   const handleIncrease = () => {
     setScreenScale(prev => prev + 0.2);
@@ -1473,14 +1447,12 @@ function App() {
       Tone.Transport.cancel();
       Tone.Transport.seconds = currentTime;
 
-      // Останавливаем все мелодии перед началом воспроизведения
       Object.values(melodyPlayers).forEach(player => {
         if (player instanceof Tone.Player) {
           player.stop();
         }
       });
 
-      // Воспроизводим каждую мелодию
       melodyList.forEach(melody => {
         const player = melodyPlayers[melody.id];
         if (!player) {
@@ -1488,22 +1460,19 @@ function App() {
           return;
         }
 
-        // Меняем velocity на volume в комментарии
-        const volume = (melody.volume / 50); // 50 = 100%, 100 = 200%
-        player.volume.value = 20 * Math.log10(volume); // Конвертируем в децибелы
+        const volume = (melody.volume / 50);
+        player.volume.value = 20 * Math.log10(volume);
 
         melody.bars.forEach(bar => {
           const barStartTime = bar.time * (240 / bpm);
-          
-          // Вычисляем смещение относительно текущего времени
+
           const offset = Math.max(0, currentTime - barStartTime);
-          
-          // Проверяем, должна ли мелодия играть в текущей позиции
+
           if (barStartTime <= currentTime && offset < melody.duration) {
             console.log(`Starting melody ${melody.id} at offset ${offset}`);
             player.start("+0", offset);
           } else if (barStartTime > currentTime) {
-            // Планируем воспроизведение мелодии в будущем
+
             const delaySeconds = barStartTime - currentTime;
             console.log(`Scheduling melody ${melody.id} to start in ${delaySeconds} seconds`);
             Tone.Transport.schedule((time) => {
@@ -1513,20 +1482,20 @@ function App() {
         });
       });
 
-      // Обновленная логика для MIDI инструментов
+
       const allNotes = [];
       midiList.forEach(instrument => {
         instrument.bars.forEach(bar => {
           const maxNotes = Math.floor(32 * bar.duration);
           const barStartTime = bar.time * (240 / bpm);
-          const barEndTime = barStartTime + (bar.duration * 240 / bpm); // Время окончания таба
+          const barEndTime = barStartTime + (bar.duration * 240 / bpm);
           
           bar.notes.forEach(note => {
             if (note.time < maxNotes) {
               allNotes.push({
                 id: note.id,
                 time: barStartTime + (note.time / 32) * (240 / bpm),
-                endTime: barEndTime, // Добавляем время окончания таба
+                endTime: barEndTime,
                 duration: note.duration,
                 instrumentId: instrument.id,
                 mute: note.mute,
@@ -1547,14 +1516,13 @@ function App() {
             if (player) {
               const instrument = midiList.find(i => i.id === note.instrumentId);
               if (instrument) {
-                const volume = (instrument.volume / 50); // Меняем velocity на volume
+                const volume = (instrument.volume / 50);
                 player.volume.value = 20 * Math.log10(volume);
               }
 
               player.playbackRate = Math.pow(2, -note.pitch / 12);
               const playerInstance = player.start(time);
 
-              // Планируем остановку ноты при достижении конца таба
               Tone.Transport.schedule((stopTime) => {
                 if (playerInstance && playerInstance.stop) {
                   playerInstance.stop();
@@ -1588,24 +1556,21 @@ function App() {
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
-    
-    // Останавливаем Tone.Transport
+
     Tone.Transport.stop();
     Tone.Transport.position = 0;
-    Tone.Transport.cancel(); // Отменяем все запланированные события
-    
-    // Останавливаем все мелодии
+    Tone.Transport.cancel();
+
     melodyList.forEach(melody => {
       melody.bars.forEach(bar => {
         const player = melodyPlayers[melody.id];
         if (player) {
           player.stop();
-          player.seek(0); // Сбрасываем позицию воспроизведения
+          player.seek(0);
         }
       });
     });
 
-    // Останавливаем все MIDI сэмплы
     Object.values(samples).forEach(player => {
       if (player instanceof Tone.Player) {
         player.stop();
@@ -1645,7 +1610,6 @@ function App() {
     setTimelinePosition(position);
   }, [currentTime, totalDuration]);
 
-  // Измените useEffect для обработки tabsTimelinePosition
   React.useEffect(() => {
     if (isPlaying) {
       timerRef.current = setInterval(() => {
@@ -1656,21 +1620,18 @@ function App() {
             return 0;
           }
 
-          // Расчет позиции для основного таймлайна
           const mainTimelinePosition = (newTime / totalDuration) * 100;
           setTimelinePosition(mainTimelinePosition);
 
-          // Расчет позиции для табов
-          const secondsPerBar = (60 / bpm) * 4; // 4 доли в такте
+
+          const secondsPerBar = (60 / bpm) * 4;
           const totalBars = TimeBarsList?.length || 1;
           const barWidth = 100 / totalBars;
-          
-          // Вычисляем текущий такт и позицию внутри такта
+
           const currentBar = Math.floor(newTime / secondsPerBar);
 
           const positionInBar = (newTime % secondsPerBar) / secondsPerBar;
-          
-          // Вычисляем общую позицию для таймлайна табов
+
           const tabPosition = (currentBar + positionInBar) * barWidth;
           setTabsTimelinePosition(tabPosition);
 
@@ -1686,12 +1647,11 @@ function App() {
     };
   }, [isPlaying, bpm, totalDuration, TimeBarsList]);
 
-  // Создаем единый AudioContext на уровне приложения
   const audioContextRef = React.useRef(null);
 
   const visualizeAudio = async (instrumentPath: string, canvasId: string) => {
     try {
-      // Функция для проверки наличия canvas
+
       const waitForCanvas = async (maxAttempts = 5): Promise<HTMLCanvasElement | null> => {
         for (let i = 0; i < maxAttempts; i++) {
           const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
@@ -1711,7 +1671,6 @@ function App() {
 
       if (canvas.dataset.rendered === 'true') return;
 
-      // Устанавливаем размеры canvas, если они не установлены
       if (canvas.width === 0 || canvas.height === 0) {
         const parent = canvas.parentElement;
         if (parent) {
@@ -1723,7 +1682,6 @@ function App() {
         }
       }
 
-      // Остальной код визуализации без изменений
       if (!audioContextRef.current) {
         try {
           audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
@@ -1782,7 +1740,6 @@ function App() {
     }
   };
 
-  // Обновляем useEffect для визуализации
   React.useEffect(() => {
     let isMounted = true;
 
@@ -1805,7 +1762,6 @@ function App() {
       }
     };
 
-    // Даем время для монтирования компонентов
     setTimeout(processVisualization, 500);
 
     return () => {
@@ -1816,8 +1772,7 @@ function App() {
   const handleTimeBarClick = (e) => {
     const tabsList = document.querySelector('.TabsList');
     if (!tabsList) return;
-    
-    // Останавливаем все текущие мелодии
+
     Object.values(melodyPlayers).forEach(player => {
       if (player instanceof Tone.Player) {
         player.stop();
@@ -1827,34 +1782,30 @@ function App() {
     const tabsListRect = tabsList.getBoundingClientRect();
     const clickX = e.clientX - tabsListRect.left;
     const totalBars = TimeBarsList?.length || 1;
-    
-    // Вычисляем в каком такте произошел клик
+
     const clickedBar = Math.floor((clickX / tabsListRect.width) * totalBars);
     const barOffset = (clickX / tabsListRect.width) * totalBars - clickedBar;
-    
-    // Вычисляем время с учетом BPM
+
     const secondsPerBar = (60 / bpm) * 4;
     const newTime = clickedBar * secondsPerBar + (barOffset * secondsPerBar);
     
     if (isPlaying) {
-      // Останавливаем все текущие мелодии
       Object.values(melodyPlayers).forEach(player => {
         if (player instanceof Tone.Player) {
           player.stop();
         }
       });
 
-      // Запускаем мелодии с новой позиции только если isPlaying
       melodyList.forEach(melody => {
         melody.bars.forEach(bar => {
           const barStartTime = bar.time * (240 / bpm);
           const player = melodyPlayers[melody.id];
           
           if (player) {
-            // Вычисляем смещение относительно начала мелодии
+
             const offset = Math.max(0, newTime - barStartTime);
             
-            // Если мелодия должна играть в этой позиции
+
             if (barStartTime <= newTime && offset < melody.duration) {
               player.start("+0", offset);
             }
@@ -1863,25 +1814,22 @@ function App() {
       });
     }
 
-    // Вычисляем позицию таймлайна с учетом деления на такты
     const barWidth = 100 / totalBars;
     const position = clickedBar * barWidth + (barOffset * barWidth);
     
     setCurrentTime(newTime);
     setTimelinePosition(position);
     setTabsTimelinePosition(position);
-    
-    // Устанавливаем позицию для Transport
+
     Tone.Transport.seconds = newTime;
 
-    // Запускаем Transport только если isPlaying
     if (isPlaying) {
       Tone.Transport.start();
     }
   };
 
   const handleTabResize = (rowId: number, barId: number, newWidth: number) => {
-    // ащита от некорректных значений
+
     if (!isFinite(newWidth)) {
       console.warn('Invalid width in handleTabResize:', newWidth);
       return;
@@ -1892,7 +1840,7 @@ function App() {
         if (row.id === rowId) {
           const updatedBars = row.bars.map(bar => {
             if (bar.id === barId) {
-              // Убеждаемся, что все вычисления дают корректные числа
+
               const maxTime = Math.floor(32 * newWidth);
               const updatedNotes = bar.notes?.map(note => ({
                 ...note,
@@ -1920,21 +1868,18 @@ function App() {
     });
     
   };
-  
-  // Обновляем handleTabResizeStart для прямого управления размером
+
   const handleTabResizeStart = (e: MouseEvent, rowId: number, barId: number) => {
     const element = e.target as HTMLElement;
     if (!element || !element.parentElement) return;
-    
-    // Проверяем, что клик был в правой части элемента (20% от ширины)
+
     const rect = element.getBoundingClientRect();
     const resizeZoneWidth = rect.width * 0.2;
     
     if (e.clientX < rect.right - resizeZoneWidth) {
-      return; // Если клик не в зоне resize, прерываем выполнение
+      return;
     }
-    
-    // Остальной код handleTabResizeStart остается без изменений
+
     resizeObserver.disconnect();
     
     const parentElement = element.parentElement;
@@ -1947,8 +1892,7 @@ function App() {
       const newWidthPx = initialWidth + deltaX;
       const newWidth = newWidthPx / parentRect.width;
       const clampedWidth = Math.max(0.1, Math.min(1, newWidth));
-      
-      // Напрямую обновляем стиль элемента
+
       element.style.width = `${clampedWidth * 100}%`;
       handleTabResize(rowId, barId, clampedWidth);
     };
@@ -1957,7 +1901,7 @@ function App() {
       document.removeEventListener('mousemove', onResize);
       document.removeEventListener('mouseup', onResizeEnd);
       
-      // Переподключаем ResizeObserver после завершения ресайза
+
       const musicTabs = document.querySelectorAll('[data-row-id][data-bar-id]');
       musicTabs.forEach(tab => resizeObserver.observe(tab));
     };
@@ -1966,18 +1910,17 @@ function App() {
     document.addEventListener('mouseup', onResizeEnd);
   };
 
-  // Обновляем ResizeObserver только для инициализации
+
   const [resizeObserver] = useState(() => new ResizeObserver((entries) => {
-    // ResizeObserver теперь используется только для отслеживания изменений,
-    // не для установки размеров
+
   }));
 
-  // Обновляем useEffect для ResizeObserver
+
   React.useEffect(() => {
     const musicTabs = document.querySelectorAll('[data-row-id][data-bar-id]');
     
     musicTabs.forEach((tab: HTMLElement) => {
-      // Устанавливаем начальную ширину из props
+
       const rowId = parseInt(tab.dataset.rowId);
       const barId = parseInt(tab.dataset.barId);
       
@@ -1994,10 +1937,10 @@ function App() {
     return () => {
       resizeObserver.disconnect();
     };
-  }, [resizeObserver, midiList]); // Добавляем midiList в зависимости
+  }, [resizeObserver, midiList]);
 
   const handleDragStart = (e: React.DragEvent, rowId: number, barId: number) => {
-    // Проверяем, что начало перетаскивания не в зоне ресайза
+
     const element = e.currentTarget;
     const rect = element.getBoundingClientRect();
     const resizeZoneWidth = rect.width * 0.2;
@@ -2043,7 +1986,6 @@ function App() {
               return bar;
             });
 
-            // Сортируем такты по времени
             return { ...row, bars: [...updatedBars].sort((a, b) => a.time - b.time) };
           }
           return row;
@@ -2064,11 +2006,9 @@ function App() {
     }
   };
 
-  // Добавляем обработчик контекстного меню
   const handleContextMenu = (e: React.MouseEvent, rowId: number, time: number) => {
     e.preventDefault();
     
-    // Проверяем, есть ли уже таб в этой позиции
     const row = midiList.find(r => r.id === rowId);
     const hasExistingTab = row?.bars.some(bar => bar.time === time);
     
@@ -2083,12 +2023,10 @@ function App() {
     }
   };
 
-  // Добавляем обработчик закрытия меню
   const handleCloseContextMenu = () => {
     setContextMenu(prev => ({ ...prev, visible: false }));
   };
 
-  // Добавляем обработчики действий меню
   const handleNewTab = () => {
     if (contextMenu.rowId !== null && contextMenu.time !== null) {
       setMidiList(prevList => {
@@ -2138,7 +2076,7 @@ function App() {
     setMidiList(prevList => {
       return prevList.map(row => {
         if (row.id === contextMenu.rowId) {
-          // Находим максимальный id среди всех нот во всех тактах
+
           const maxNoteId = Math.max(
             0,
             ...row.bars.flatMap(b => b.notes.map(n => n.id))
@@ -2150,7 +2088,7 @@ function App() {
             time: contextMenu.time,
             notes: copiedBar.notes.map((note, index) => ({
               ...note,
-              id: maxNoteId + index + 1 // Создаем новый уникальный id для каждой ноты
+              id: maxNoteId + index + 1 
             }))
           };
           
@@ -2166,7 +2104,6 @@ function App() {
     handleCloseContextMenu();
   };
 
-  // Добавляем эффект для закрытия меню при клике вне его
   React.useEffect(() => {
     const handleClickOutside = () => handleCloseContextMenu();
     if (contextMenu.visible) {
@@ -2177,7 +2114,6 @@ function App() {
     };
   }, [contextMenu.visible]);
 
-  // Добавляем обработчик правого клика по MusicTab
   const handleMusicTabContextMenu = (e: React.MouseEvent, rowId: number, barId: number) => {
     e.preventDefault();
     
@@ -2195,7 +2131,6 @@ function App() {
     }
   };
 
-  // Добавляем обработчик закрытия модального окна
   const handleCloseNotesEdit = () => {
     setNotesEditModal({
       visible: false,
@@ -2205,7 +2140,6 @@ function App() {
     });
   };
 
-  // Добавляем обработчик переключения состояния mute для ноты
   const handleToggleNoteMute = (noteId: number) => {
     setMidiList(prevList => {
       return prevList.map(row => {
@@ -2233,7 +2167,6 @@ function App() {
     });
   };
 
-  // В компоненте App добавляем обработчики для кнопок
   const handleAcceptChanges = () => {
     handleCloseNotesEdit();
   };
@@ -2303,7 +2236,6 @@ function App() {
     });
   };
 
-  // Добавляем обработчик удаления
   const handleDeleteBar = () => {
     if (notesEditModal.rowId === null || notesEditModal.barId === null) {
       console.log('No bar selected for deletion');
@@ -2311,13 +2243,11 @@ function App() {
     }
 
     setMidiList(prevList => {
-      // Создаем глубокую копию списка
       const newList = prevList.map(row => {
         if (row.id === notesEditModal.rowId) {
           console.log('Found row:', row.id);
           console.log('Bars before deletion:', row.bars);
           
-          // Фильтруем такты, удаляя тот, который соответствует barId
           const filteredBars = row.bars.filter(bar => {
             const shouldKeep = bar.id !== notesEditModal.barId;
             console.log('Bar:', bar.id, 'Should keep:', shouldKeep);
@@ -2344,7 +2274,6 @@ function App() {
     setMidiList(prevList => prevList.filter(item => item.id !== instrumentId));
   };
 
-  // Добавляем функцию для добавления нового инструмента
   const handleAddInstrument = (instrument) => {
     setMidiList(prevList => {
       const newId = Math.max(0, ...prevList.map(item => item.id)) + 1;
@@ -2354,28 +2283,25 @@ function App() {
         path: instrument.path,
         pitch: 0,
         type: "midi",
-        volume: 50, // Добавляем начальное значение громкости
+        volume: 50,
         bars: []
       }];
     });
     setIsDropdownOpen(false);
   };
 
-  // Обновляем useEffect для загрузки и инициализации мелодий
   React.useEffect(() => {
     const loadMelodies = async () => {
       try {
         const loadedMelodyPlayers = {};
         
-        // Загружаем все мелодии параллельно
         await Promise.all(melodyList.map(async (melody) => {
           try {
-            // Создаем новый плеер для каждой мелодии
             const player = new Tone.Player({
               url: melody.path,
               onload: () => {
                 console.log(`Melody loaded: ${melody.instrument}`);
-                // Визуализируем waveform для каждого бара мелодии
+
                 melody.bars.forEach(bar => {
                   visualizeMelody(melody.path, `melody-waveform-${melody.id}-${bar.id}`);
                 });
@@ -2387,10 +2313,8 @@ function App() {
 
             loadedMelodyPlayers[melody.id] = player;
             
-            // Получаем длительность
             const duration = await getAudioDuration(melody.path);
-            
-            // Обновляем melodyList с длительностью
+
             setMelodyList(prevList => 
               prevList.map(m => 
                 m.id === melody.id ? { ...m, duration } : m
@@ -2402,10 +2326,9 @@ function App() {
           }
         }));
 
-        // Обновляем состояние плееров
+
         setMelodyPlayers(loadedMelodyPlayers);
         
-        // Устанавливаем BPM из первой мелодии
         const firstMelody = AvailableMelodies.find(m => m.path === melodyList[0].path);
         if (firstMelody) {
           setBpm(firstMelody.bpm);
@@ -2418,18 +2341,16 @@ function App() {
     };
 
     loadMelodies();
-  }, []); // Запускаем только при монтировании
+  }, []);
 
-  // Обновляем функцию визуализации мелодии
   const visualizeMelody = async (audioPath: string, canvasId: string) => {
     try {
-      // Ждем немного, чтобы canvas успел отрендериться
+
       await new Promise(resolve => setTimeout(resolve, 100));
 
       const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
       if (!canvas || canvas.dataset.rendered === 'true') return;
 
-      // Устанавливаем размеры canvas
       const parent = canvas.parentElement;
       if (parent) {
         canvas.width = parent.offsetWidth;
@@ -2453,7 +2374,7 @@ function App() {
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.beginPath();
-      ctx.strokeStyle = 'rgba(255, 255, 0, 0.8)'; // Изменили с rgba(163, 60, 146, 0.8) на желтый
+      ctx.strokeStyle = 'rgba(255, 255, 0, 0.8)';
       ctx.lineWidth = 1;
 
       for (let i = 0; i < canvas.width; i++) {
@@ -2485,7 +2406,6 @@ function App() {
   };
   console.log(midiList)
 
-  // Функция для получения длительности аудио
   const getAudioDuration = async (audioPath: string): Promise<number> => {
     try {
       const response = await fetch(audioPath);
@@ -2502,7 +2422,6 @@ function App() {
   // Вычисляем длительность одного такта в секундах
   const barDurationInSeconds = (60 / bpm) * 4; // 4 доли в такте
 
-  // В компоненте App добавляем обработчики для перетаскивания мелодии
   const handleMelodyDragStart = (e: React.DragEvent, melodyId: number, barId: number) => {
     e.stopPropagation();
     e.dataTransfer.setData('text/plain', JSON.stringify({ 
@@ -2511,7 +2430,6 @@ function App() {
       barId 
     }));
     
-    // Добавляем эффект перетаскивания
     e.dataTransfer.effectAllowed = 'move';
   };
 
@@ -2520,7 +2438,7 @@ function App() {
     
     try {
       const data = JSON.parse(e.dataTransfer.getData('text/plain'));
-      if (data.type !== 'melody') return; // Обрабатываем только мелодии
+      if (data.type !== 'melody') return;
       
       const { melodyId, barId } = data;
 
@@ -2554,13 +2472,11 @@ function App() {
     }
   };
 
-  // В компоненте App добавляем новое состояние
   const [changeMelodyModal, setChangeMelodyModal] = useState({
     visible: false,
     melodyId: null
   });
 
-  // Добавляем обработчик открытия модального окна
   const handleOpenChangeMelody = (melodyId: number) => {
     setChangeMelodyModal({
       visible: true,
@@ -2568,7 +2484,6 @@ function App() {
     });
   };
 
-  // Добавляем обработчик закрытия модального окна
   const handleCloseChangeMelody = () => {
     setChangeMelodyModal({
       visible: false,
@@ -2576,21 +2491,18 @@ function App() {
     });
   };
 
-  // Используем useCallback для создания стабильной функции
   const handleChangeMelody = useCallback(async (newMelody) => {
     if (!changeMelodyModal.melodyId) {
       console.log('No melody ID in modal state:', changeMelodyModal);
       return;
     }
 
-    // Останавливаем и удаляем старый плеер
     const oldPlayer = melodyPlayers[changeMelodyModal.melodyId];
     if (oldPlayer) {
       oldPlayer.stop();
       oldPlayer.dispose();
     }
 
-    // Создаем новый плеер
     const newPlayer = new Tone.Player({
       url: newMelody.path,
       onload: () => {
@@ -2599,17 +2511,14 @@ function App() {
       }
     }).toDestination();
 
-    // Обновляем состояние плееров
     setMelodyPlayers(prev => ({
       ...prev,
       [changeMelodyModal.melodyId]: newPlayer
     }));
 
-    // Обновляем BPM
     setBpm(newMelody.bpm);
     setBpmSeconds(60 / newMelody.bpm);
 
-    // Обновляем список мелодий
     setMelodyList(prevList => 
       prevList.map(melody => {
         if (melody.id === changeMelodyModal.melodyId) {
@@ -2631,7 +2540,6 @@ function App() {
       })
     );
 
-    // Загружаем длительность новой мелодии
     const duration = await getAudioDuration(newMelody.path);
     
     setMelodyList(prevList => 
@@ -2647,9 +2555,8 @@ function App() {
     );
 
     handleCloseChangeMelody();
-  }, [changeMelodyModal.melodyId, melodyPlayers]); // Добавляем melodyPlayers в зависимости
+  }, [changeMelodyModal.melodyId, melodyPlayers]);
 
-  // Добавляем useEffect для визуализации превью мелодий
   React.useEffect(() => {
     if (changeMelodyModal.visible) {
       AvailableMelodies.forEach((melody, index) => {
@@ -2658,7 +2565,6 @@ function App() {
     }
   }, [changeMelodyModal.visible]);
 
-  // Добавляем эффект для отслеживания изменений громкости мелодий
   React.useEffect(() => {
     melodyList.forEach(melody => {
       const player = melodyPlayers[melody.id];
@@ -2669,7 +2575,6 @@ function App() {
     });
   }, [melodyList, melodyPlayers]);
 
-  // Добавляем эффект для отслеживания изменений громкости MIDI инструментов
   React.useEffect(() => {
     midiList.forEach(instrument => {
       const player = samples[instrument.id];
@@ -2720,7 +2625,6 @@ function App() {
                       )
                     );
                     
-                    // Немедленно обновляем громкость текущего плеера
                     const player = samples[instrument.id];
                     if (player) {
                       const volume = newVolume / 50;
@@ -2785,7 +2689,6 @@ function App() {
                         )
                       );
                       
-                      // Немедленно обновляем громкость текущего плеера
                       const player = melodyPlayers[melody.id];
                       if (player) {
                         const volume = newVolume / 50;
@@ -2909,7 +2812,6 @@ function App() {
               </TabsRow>
             ))}
             
-            {/* Добавляем контекстное меню */}
             {contextMenu.visible && (
               <ContextMenu 
                 style={{ 
@@ -2930,7 +2832,7 @@ function App() {
 
         <div>
           <MelodySection>
-            <TabsTimeline $position={tabsTimelinePosition} /> {/* Добавляем timeline */}
+            <TabsTimeline $position={tabsTimelinePosition} />
             {melodyList.map((melody) => (
               <MelodyRow key={melody.id}>
                 <div 
@@ -3005,7 +2907,6 @@ function App() {
         </div>
       </div>
 
-      {/* Добавляем модальное окно */}
       {notesEditModal.visible && (
         <>
           <ModalOverlay onClick={handleCloseNotesEdit} />
@@ -3077,7 +2978,6 @@ function App() {
         </>
       )}
 
-      {/* Добавляем контекстное меню для мелодий */}
       {melodyContextMenu.visible && (
         <ContextMenu 
           style={{ 
