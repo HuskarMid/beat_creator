@@ -1,0 +1,37 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+  font-family: 'SF Pro Display', sans-serif;
+}
+
+.App {
+  background-color: black;
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.engine {
+  width: 85%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  
+  > div:last-child {
+    margin-top: auto;
+  }
+}
+
