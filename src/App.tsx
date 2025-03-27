@@ -4,16 +4,16 @@ import * as Tone from 'tone';
 import styled from 'styled-components';
 
 const AvailibleInstruments = [
-  {name: 'Kick #1', path: '/sounds/FullKick_07_641.wav'}, 
-  {name: 'Clap #1', path: '/sounds/909Clap_02_146_SP.wav'},
-  {name: 'HiHat #1', path: '/sounds/33_HiHat_SP_42_55.wav'},
-  {name: '808 #1', path: '/sounds/uk-drill-808-bass.wav'}
+  { name: 'Kick #1', path: '/sounds/FullKick_07_641.wav' },
+  { name: 'Clap #1', path: '/sounds/909Clap_02_146_SP.wav' },
+  { name: 'HiHat #1', path: '/sounds/33_HiHat_SP_42_55.wav' },
+  { name: '808 #1', path: '/sounds/uk-drill-808-bass.wav' }
 ]
 
 const AvailableMelodies = [
-  {name: 'Melody #1', bpm: 144, path: '/sounds/melody/looperman-l-2784143-0213659-rod-wave-piano-melody-stress-relief.wav'}, 
-  {name: 'Melody #2', bpm: 130, path: '/sounds/melody/melody_2.wav'},
-  {name: 'Melody #3', bpm: 110, path: '/sounds/melody/melody_3.wav'}
+  { name: 'Melody #1', bpm: 144, path: '/sounds/melody/looperman-l-2784143-0213659-rod-wave-piano-melody-stress-relief.wav' },
+  { name: 'Melody #2', bpm: 130, path: '/sounds/melody/melody_2.wav' },
+  { name: 'Melody #3', bpm: 110, path: '/sounds/melody/melody_3.wav' }
 ]
 
 const TopBar = styled.div`
@@ -261,28 +261,20 @@ const MidiTab = styled.div<{ $position: number; $width: number }>`
 
 
 
-const WaveformCanvas = styled.canvas<{ 
-  $position: number; 
-  $width: number; 
-  $originalDuration: number 
+const WaveformCanvas = styled.canvas<{
+  $position: number;
+  $width: number;
+  $originalDuration: number
 }>`
   position: absolute;
   left: ${(props) => (props.$position / props.$originalDuration) * 100}%;
   width: ${(props) => Math.min(
-    (props.$width / props.$originalDuration) * 100,
-    100 - (props.$position / props.$originalDuration) * 100
-  )}%;
+  (props.$width / props.$originalDuration) * 100,
+  100 - (props.$position / props.$originalDuration) * 100
+)}%;
   height: 100%;
 `;
 
-interface Note {
-  id: number;
-  time: number;
-  duration: number;
-  mute: boolean;
-  instrumentId?: number;
-  pitch: number;
-}
 
 const ContextMenu = styled.div`
   position: fixed;
@@ -395,8 +387,8 @@ const Note = styled.div<{ $isActive: boolean; $colIndex: number }>`
   transition: background-color 0.1s ease;
 
   &:hover {
-    background-color: ${props => 
-      props.$isActive ? '#ff69b4' : 'rgba(255, 105, 180, 0.3)'};
+    background-color: ${props =>
+    props.$isActive ? '#ff69b4' : 'rgba(255, 105, 180, 0.3)'};
   }
 `;
 
@@ -745,9 +737,7 @@ function App() {
   const timerRef = useRef(null);
 
   const [bpm, setBpm] = useState(144);
-  const [bpmSeconds, setBpmSeconds] = useState(60 / bpm);
-  const [bpmSteps, setBpmSteps] = useState(0);
-  
+
 
   const [melodyList, setMelodyList] = useState([
     {
@@ -774,474 +764,473 @@ function App() {
 
   const [midiList, setMidiList] = useState([
     {
-        "id": 1,
-        "instrument": "Kick #1",
-        "path": "/sounds/FullKick_07_641.wav",
-        "pitch": 0,
-        "type": "midi",
-        "volume": 50,
-        "bars": [
+      "id": 1,
+      "instrument": "Kick #1",
+      "path": "/sounds/FullKick_07_641.wav",
+      "pitch": 0,
+      "type": "midi",
+      "volume": 50,
+      "bars": [
+        {
+          "id": 1,
+          "time": 4,
+          "duration": 1,
+          "notes": [
             {
-                "id": 1,
-                "time": 4,
-                "duration": 1,
-                "notes": [
-                    {
-                        "id": 1,
-                        "time": 0,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 2,
-                        "time": 20,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 3,
-                        "time": 24,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    }
-                ]
+              "id": 1,
+              "time": 0,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
             },
             {
-                "id": 2,
-                "time": 5,
-                "duration": 1,
-                "notes": [
-                    {
-                        "id": 4,
-                        "time": 0,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 5,
-                        "time": 20,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    }
-                ]
+              "id": 2,
+              "time": 20,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
             },
             {
-                "id": 3,
-                "time": 6,
-                "duration": 1,
-                "notes": [
-                    {
-                        "id": 7,
-                        "time": 0,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 8,
-                        "time": 20,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 9,
-                        "time": 24,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    }
-                ]
-            },
-            {
-                "id": 4,
-                "time": 7,
-                "duration": 1,
-                "notes": [
-                    {
-                        "id": 10,
-                        "time": 0,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 11,
-                        "time": 20,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 12,
-                        "time": 28,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    }
-                ]
+              "id": 3,
+              "time": 24,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
             }
-        ]
+          ]
+        },
+        {
+          "id": 2,
+          "time": 5,
+          "duration": 1,
+          "notes": [
+            {
+              "id": 4,
+              "time": 0,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 5,
+              "time": 20,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "time": 6,
+          "duration": 1,
+          "notes": [
+            {
+              "id": 7,
+              "time": 0,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 8,
+              "time": 20,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 9,
+              "time": 24,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "time": 7,
+          "duration": 1,
+          "notes": [
+            {
+              "id": 10,
+              "time": 0,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 11,
+              "time": 20,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 12,
+              "time": 28,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            }
+          ]
+        }
+      ]
     },
     {
-        "id": 2,
-        "instrument": "Clap #1",
-        "path": "/sounds/909Clap_02_146_SP.wav",
-        "pitch": 0,
-        "type": "midi",
-        "volume": 50,
-        "bars": [
+      "id": 2,
+      "instrument": "Clap #1",
+      "path": "/sounds/909Clap_02_146_SP.wav",
+      "pitch": 0,
+      "type": "midi",
+      "volume": 50,
+      "bars": [
+        {
+          "id": 4,
+          "time": 4,
+          "duration": 1,
+          "notes": [
             {
-                "id": 4,
-                "time": 4,
-                "duration": 1,
-                "notes": [
-                    {
-                        "id": 4,
-                        "time": 16,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    }
-                ]
-            },
-            {
-                "id": 1,
-                "time": 5,
-                "duration": 1,
-                "notes": [
-                    {
-                        "id": 1,
-                        "time": 16,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 2,
-                        "time": 18,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 3,
-                        "time": 26,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    }
-                ]
-            },
-            {
-                "id": 2,
-                "time": 6,
-                "duration": 1,
-                "notes": [
-                    {
-                        "id": 2,
-                        "time": 16,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    }
-                ]
-            },
-            {
-                "id": 3,
-                "time": 7,
-                "duration": 1,
-                "notes": [
-                    {
-                        "id": 3,
-                        "time": 16,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 4,
-                        "time": 28,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    }
-                ]
+              "id": 4,
+              "time": 16,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
             }
-        ]
+          ]
+        },
+        {
+          "id": 1,
+          "time": 5,
+          "duration": 1,
+          "notes": [
+            {
+              "id": 1,
+              "time": 16,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 2,
+              "time": 18,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 3,
+              "time": 26,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "time": 6,
+          "duration": 1,
+          "notes": [
+            {
+              "id": 2,
+              "time": 16,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "time": 7,
+          "duration": 1,
+          "notes": [
+            {
+              "id": 3,
+              "time": 16,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 4,
+              "time": 28,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            }
+          ]
+        }
+      ]
     },
     {
-        "id": 3,
-        "instrument": "HiHat #1",
-        "path": "/sounds/33_HiHat_SP_42_55.wav",
-        "pitch": 0,
-        "type": "midi",
-        "volume": 50,
-        "bars": [
+      "id": 3,
+      "instrument": "HiHat #1",
+      "path": "/sounds/33_HiHat_SP_42_55.wav",
+      "pitch": 0,
+      "type": "midi",
+      "volume": 50,
+      "bars": [
+        {
+          "id": 1,
+          "time": 4,
+          "duration": 1,
+          "notes": [
             {
-                "id": 1,
-                "time": 4,
-                "duration": 1,
-                "notes": [
-                    {
-                        "id": 1,
-                        "time": 0,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 2,
-                        "time": 4,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 3,
-                        "time": 8,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 4,
-                        "time": 12,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 5,
-                        "time": 16,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 6,
-                        "time": 20,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 9,
-                        "time": 24,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 14
-                    },
-                    {
-                        "id": 10,
-                        "time": 28,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 14
-                    }
-                ]
+              "id": 1,
+              "time": 0,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
             },
             {
-                "id": 2,
-                "time": 5,
-                "duration": 1,
-                "notes": [
-                    {
-                        "id": 9,
-                        "time": 0,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 10,
-                        "time": 4,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 11,
-                        "time": 8,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 12,
-                        "time": 12,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 13,
-                        "time": 16,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 14,
-                        "time": 20,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 17,
-                        "time": 24,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 10
-                    },
-                    {
-                        "id": 18,
-                        "time": 28,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 10
-                    }
-                ]
+              "id": 2,
+              "time": 4,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
             },
             {
-                "id": 3,
-                "time": 6,
-                "duration": 1,
-                "notes": [
-                    {
-                        "id": 17,
-                        "time": 0,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 18,
-                        "time": 4,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 19,
-                        "time": 8,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 20,
-                        "time": 12,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 21,
-                        "time": 16,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 22,
-                        "time": 20,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 23,
-                        "time": 24,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 24,
-                        "time": 28,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    }
-                ]
+              "id": 3,
+              "time": 8,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
             },
             {
-                "id": 4,
-                "time": 7,
-                "duration": 1,
-                "notes": [
-                    {
-                        "id": 25,
-                        "time": 0,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 26,
-                        "time": 4,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 27,
-                        "time": 8,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 28,
-                        "time": 12,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 29,
-                        "time": 16,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 30,
-                        "time": 20,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 12
-                    },
-                    {
-                        "id": 33,
-                        "time": 28,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 14
-                    },
-                    {
-                        "id": 34,
-                        "time": 24,
-                        "duration": 1,
-                        "mute": false,
-                        "pitch": 14
-                    }
-                ]
+              "id": 4,
+              "time": 12,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 5,
+              "time": 16,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 6,
+              "time": 20,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 9,
+              "time": 24,
+              "duration": 1,
+              "mute": false,
+              "pitch": 14
+            },
+            {
+              "id": 10,
+              "time": 28,
+              "duration": 1,
+              "mute": false,
+              "pitch": 14
             }
-        ]
+          ]
+        },
+        {
+          "id": 2,
+          "time": 5,
+          "duration": 1,
+          "notes": [
+            {
+              "id": 9,
+              "time": 0,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 10,
+              "time": 4,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 11,
+              "time": 8,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 12,
+              "time": 12,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 13,
+              "time": 16,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 14,
+              "time": 20,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 17,
+              "time": 24,
+              "duration": 1,
+              "mute": false,
+              "pitch": 10
+            },
+            {
+              "id": 18,
+              "time": 28,
+              "duration": 1,
+              "mute": false,
+              "pitch": 10
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "time": 6,
+          "duration": 1,
+          "notes": [
+            {
+              "id": 17,
+              "time": 0,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 18,
+              "time": 4,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 19,
+              "time": 8,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 20,
+              "time": 12,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 21,
+              "time": 16,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 22,
+              "time": 20,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 23,
+              "time": 24,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 24,
+              "time": 28,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "time": 7,
+          "duration": 1,
+          "notes": [
+            {
+              "id": 25,
+              "time": 0,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 26,
+              "time": 4,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 27,
+              "time": 8,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 28,
+              "time": 12,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 29,
+              "time": 16,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 30,
+              "time": 20,
+              "duration": 1,
+              "mute": false,
+              "pitch": 12
+            },
+            {
+              "id": 33,
+              "time": 28,
+              "duration": 1,
+              "mute": false,
+              "pitch": 14
+            },
+            {
+              "id": 34,
+              "time": 24,
+              "duration": 1,
+              "mute": false,
+              "pitch": 14
+            }
+          ]
+        }
+      ]
     }
-]);
+  ]);
 
   const [samples, setSamples] = useState({});
-  const [melodyPlayers, setMelodyPlayers] = useState<{[key: string]: Tone.Player}>({});
-  const [samplesLoaded, setSamplesLoaded] = useState(false);
+  const [melodyPlayers, setMelodyPlayers] = useState<{ [key: string]: Tone.Player }>({});
 
   const [contextMenu, setContextMenu] = useState({
     visible: false,
@@ -1261,8 +1250,6 @@ function App() {
 
   const [copiedBar, setCopiedBar] = useState(null);
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [dropdownAnimating, setDropdownAnimating] = useState(false);
 
@@ -1272,9 +1259,6 @@ function App() {
       setDropdownAnimating(true);
       setTimeout(() => {
         setDropdownAnimating(false);
-        if (!dropdownVisible) {
-          setIsDropdownOpen(false);
-        }
       }, 200);
     }
   };
@@ -1289,7 +1273,7 @@ function App() {
 
   const handleMelodyContextMenu = (e: React.MouseEvent, melodyId: number, barId: number) => {
     e.preventDefault(); // Предотвращаем появление браузерного меню
-    
+
     setMelodyContextMenu({
       visible: true,
       x: e.clientX,
@@ -1323,7 +1307,7 @@ function App() {
           const newBar = {
             ...originalBar,
             id: maxBarId + 1,
-            time: originalBar.time + barsNeeded 
+            time: originalBar.time + barsNeeded
           };
 
           const newPlayer = new Tone.Player(melody.path).toDestination();
@@ -1417,13 +1401,12 @@ function App() {
         setSamples(loadedSamples);
         setMelodyPlayers(loadedMelodyPlayers);
         await Tone.loaded();
-        setSamplesLoaded(true);
       } catch (error) {
         console.error("Ошибка при загрузке сэмплов:", error);
       }
     };
     loadSamples();
-  }, [midiList, melodyList]);
+  }, [midiList, melodyList, melodyPlayers, samples]);
 
   const handleIncrease = () => {
     setScreenScale(prev => prev + 0.2);
@@ -1435,12 +1418,12 @@ function App() {
 
   const handlePlay = async () => {
     if (isPlaying) return;
-    
+
     try {
       if (Tone.context.state === 'suspended') {
         await Tone.context.resume();
       }
-      
+
       await Tone.start();
       setIsPlaying(true);
       Tone.Transport.bpm.value = bpm;
@@ -1489,7 +1472,7 @@ function App() {
           const maxNotes = Math.floor(32 * bar.duration);
           const barStartTime = bar.time * (240 / bpm);
           const barEndTime = barStartTime + (bar.duration * 240 / bpm);
-          
+
           bar.notes.forEach(note => {
             if (note.time < maxNotes) {
               allNotes.push({
@@ -1587,7 +1570,7 @@ function App() {
     if (topBarRef.current) {
       const parentWidth = topBarRef.current.offsetWidth;
       const numBars = Math.floor(parentWidth / (parentWidth / (20 / ScreenScale)));
-      const newTimeBars = Array.from({length: numBars}, (_, i) => ({id: i}));
+      const newTimeBars = Array.from({ length: numBars }, (_, i) => ({ id: i }));
       setTimeBars(newTimeBars);
     }
   }, [ScreenScale]);
@@ -1616,7 +1599,6 @@ function App() {
         setCurrentTime(prev => {
           const newTime = prev + 0.1;
           if (newTime >= totalDuration) {
-            handleStop();
             return 0;
           }
 
@@ -1639,7 +1621,7 @@ function App() {
         });
       }, 100);
     }
-    
+
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -1711,10 +1693,10 @@ function App() {
           for (let i = 0; i < canvas.width; i++) {
             const startIdx = Math.floor(i * step);
             const endIdx = Math.floor((i + 1) * step);
-            
+
             let minValue = 1.0;
             let maxValue = -1.0;
-            
+
             for (let j = startIdx; j < endIdx && j < data.length; j++) {
               const value = data[j];
               if (value < minValue) minValue = value;
@@ -1723,11 +1705,11 @@ function App() {
 
             const y1 = ((1 + minValue) / 2) * canvas.height;
             const y2 = ((1 + maxValue) / 2) * canvas.height;
-            
+
             ctx.moveTo(i, y1);
             ctx.lineTo(i, y2);
           }
-          
+
           ctx.stroke();
           canvas.dataset.rendered = 'true';
         } catch (error) {
@@ -1778,7 +1760,7 @@ function App() {
         player.stop();
       }
     });
-    
+
     const tabsListRect = tabsList.getBoundingClientRect();
     const clickX = e.clientX - tabsListRect.left;
     const totalBars = TimeBarsList?.length || 1;
@@ -1788,7 +1770,7 @@ function App() {
 
     const secondsPerBar = (60 / bpm) * 4;
     const newTime = clickedBar * secondsPerBar + (barOffset * secondsPerBar);
-    
+
     if (isPlaying) {
       Object.values(melodyPlayers).forEach(player => {
         if (player instanceof Tone.Player) {
@@ -1800,11 +1782,11 @@ function App() {
         melody.bars.forEach(bar => {
           const barStartTime = bar.time * (240 / bpm);
           const player = melodyPlayers[melody.id];
-          
+
           if (player) {
 
             const offset = Math.max(0, newTime - barStartTime);
-            
+
 
             if (barStartTime <= newTime && offset < melody.duration) {
               player.start("+0", offset);
@@ -1816,7 +1798,7 @@ function App() {
 
     const barWidth = 100 / totalBars;
     const position = clickedBar * barWidth + (barOffset * barWidth);
-    
+
     setCurrentTime(newTime);
     setTimelinePosition(position);
     setTabsTimelinePosition(position);
@@ -1834,7 +1816,7 @@ function App() {
       console.warn('Invalid width in handleTabResize:', newWidth);
       return;
     }
-    
+
     setMidiList(prevList => {
       const updatedList = prevList.map(row => {
         if (row.id === rowId) {
@@ -1863,10 +1845,10 @@ function App() {
         }
         return row;
       });
-      
+
       return updatedList;
     });
-    
+
   };
 
   const handleTabResizeStart = (e: MouseEvent, rowId: number, barId: number) => {
@@ -1875,18 +1857,18 @@ function App() {
 
     const rect = element.getBoundingClientRect();
     const resizeZoneWidth = rect.width * 0.2;
-    
+
     if (e.clientX < rect.right - resizeZoneWidth) {
       return;
     }
 
     resizeObserver.disconnect();
-    
+
     const parentElement = element.parentElement;
     const parentRect = parentElement.getBoundingClientRect();
     const startX = e.clientX;
     const initialWidth = element.offsetWidth;
-    
+
     const onResize = (moveEvent: MouseEvent) => {
       const deltaX = moveEvent.clientX - startX;
       const newWidthPx = initialWidth + deltaX;
@@ -1900,7 +1882,7 @@ function App() {
     const onResizeEnd = () => {
       document.removeEventListener('mousemove', onResize);
       document.removeEventListener('mouseup', onResizeEnd);
-      
+
 
       const musicTabs = document.querySelectorAll('[data-row-id][data-bar-id]');
       musicTabs.forEach(tab => resizeObserver.observe(tab));
@@ -1918,19 +1900,19 @@ function App() {
 
   React.useEffect(() => {
     const musicTabs = document.querySelectorAll('[data-row-id][data-bar-id]');
-    
+
     musicTabs.forEach((tab: HTMLElement) => {
 
       const rowId = parseInt(tab.dataset.rowId);
       const barId = parseInt(tab.dataset.barId);
-      
+
       const row = midiList.find(r => r.id === rowId);
       const bar = row?.bars.find(b => b.id === barId);
-      
+
       if (bar) {
         tab.style.width = `${bar.duration * 100}%`;
       }
-      
+
       resizeObserver.observe(tab);
     });
 
@@ -1944,7 +1926,7 @@ function App() {
     const element = e.currentTarget;
     const rect = element.getBoundingClientRect();
     const resizeZoneWidth = rect.width * 0.2;
-    
+
     if (e.clientX > rect.right - resizeZoneWidth) {
       e.preventDefault();
       return;
@@ -1959,7 +1941,7 @@ function App() {
 
   const handleDrop = (e: React.DragEvent, targetTime: number) => {
     e.preventDefault();
-    
+
     try {
       const data = JSON.parse(e.dataTransfer.getData('text/plain'));
       const { rowId, barId } = data;
@@ -1974,8 +1956,8 @@ function App() {
           if (row.id === rowId) {
             const updatedBars = row.bars.map(bar => {
               if (bar.id === barId) {
-                return { 
-                  ...bar, 
+                return {
+                  ...bar,
                   time: targetTime,
                   notes: bar.notes.map(note => ({
                     ...note,
@@ -2008,10 +1990,10 @@ function App() {
 
   const handleContextMenu = (e: React.MouseEvent, rowId: number, time: number) => {
     e.preventDefault();
-    
+
     const row = midiList.find(r => r.id === rowId);
     const hasExistingTab = row?.bars.some(bar => bar.time === time);
-    
+
     if (!hasExistingTab) {
       setContextMenu({
         visible: true,
@@ -2052,10 +2034,10 @@ function App() {
 
   const handleCopyNotes = () => {
 
-    
+
     const row = midiList.find(r => r.id === notesEditModal.rowId);
     const bar = row?.bars.find(b => b.id === notesEditModal.barId);
-    
+
     if (bar) {
       setCopiedBar({
         ...bar,
@@ -2066,7 +2048,7 @@ function App() {
     } else {
       console.log('Bar not found:', { rowId: notesEditModal.rowId, barId: notesEditModal.barId, row });
     }
-    
+
     handleCloseNotesEdit();
   };
 
@@ -2081,17 +2063,17 @@ function App() {
             0,
             ...row.bars.flatMap(b => b.notes.map(n => n.id))
           );
-          
+
           const newBar = {
             ...copiedBar,
             id: Math.max(0, ...row.bars.map(b => b.id)) + 1,
             time: contextMenu.time,
             notes: copiedBar.notes.map((note, index) => ({
               ...note,
-              id: maxNoteId + index + 1 
+              id: maxNoteId + index + 1
             }))
           };
-          
+
           return {
             ...row,
             bars: [...row.bars, newBar].sort((a, b) => a.time - b.time)
@@ -2100,7 +2082,7 @@ function App() {
         return row;
       });
     });
-    
+
     handleCloseContextMenu();
   };
 
@@ -2116,10 +2098,10 @@ function App() {
 
   const handleMusicTabContextMenu = (e: React.MouseEvent, rowId: number, barId: number) => {
     e.preventDefault();
-    
+
     const row = midiList.find(r => r.id === rowId);
     const bar = row?.bars.find(b => b.id === barId);
-    
+
     if (bar) {
       setNotesEditModal({
         visible: true,
@@ -2140,36 +2122,6 @@ function App() {
     });
   };
 
-  const handleToggleNoteMute = (noteId: number) => {
-    setMidiList(prevList => {
-      return prevList.map(row => {
-        if (row.id === notesEditModal.rowId) {
-          return {
-            ...row,
-            bars: row.bars.map(bar => {
-              if (bar.id === notesEditModal.barId) {
-                return {
-                  ...bar,
-                  notes: bar.notes.map(note => {
-                    if (note.id === noteId) {
-                      return { ...note, mute: !note.mute };
-                    }
-                    return note;
-                  })
-                };
-              }
-              return bar;
-            })
-          };
-        }
-        return row;
-      });
-    });
-  };
-
-  const handleAcceptChanges = () => {
-    handleCloseNotesEdit();
-  };
 
   const handleNoteClick = (row: number, col: number) => {
     if (notesEditModal.rowId === undefined || notesEditModal.barId === undefined) {
@@ -2195,7 +2147,7 @@ function App() {
 
                 let newNotes;
                 if (existingNote) {
-                  newNotes = bar.notes.filter(note => 
+                  newNotes = bar.notes.filter(note =>
                     note.pitch !== row || note.time !== col
                   );
                 } else {
@@ -2247,15 +2199,15 @@ function App() {
         if (row.id === notesEditModal.rowId) {
           console.log('Found row:', row.id);
           console.log('Bars before deletion:', row.bars);
-          
+
           const filteredBars = row.bars.filter(bar => {
             const shouldKeep = bar.id !== notesEditModal.barId;
             console.log('Bar:', bar.id, 'Should keep:', shouldKeep);
             return shouldKeep;
           });
-          
+
           console.log('Bars after deletion:', filteredBars);
-          
+
           return {
             ...row,
             bars: filteredBars
@@ -2287,14 +2239,13 @@ function App() {
         bars: []
       }];
     });
-    setIsDropdownOpen(false);
   };
 
   React.useEffect(() => {
     const loadMelodies = async () => {
       try {
         const loadedMelodyPlayers = {};
-        
+
         await Promise.all(melodyList.map(async (melody) => {
           try {
             const player = new Tone.Player({
@@ -2312,15 +2263,15 @@ function App() {
             }).toDestination();
 
             loadedMelodyPlayers[melody.id] = player;
-            
+
             const duration = await getAudioDuration(melody.path);
 
-            setMelodyList(prevList => 
-              prevList.map(m => 
+            setMelodyList(prevList =>
+              prevList.map(m =>
                 m.id === melody.id ? { ...m, duration } : m
               )
             );
-            
+
           } catch (error) {
             console.error(`Error initializing melody ${melody.instrument}:`, error);
           }
@@ -2328,11 +2279,10 @@ function App() {
 
 
         setMelodyPlayers(loadedMelodyPlayers);
-        
+
         const firstMelody = AvailableMelodies.find(m => m.path === melodyList[0].path);
         if (firstMelody) {
           setBpm(firstMelody.bpm);
-          setBpmSeconds(60 / firstMelody.bpm);
         }
 
       } catch (error) {
@@ -2361,7 +2311,7 @@ function App() {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const arrayBuffer = await response.arrayBuffer();
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
       const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
@@ -2380,10 +2330,10 @@ function App() {
       for (let i = 0; i < canvas.width; i++) {
         const startIdx = Math.floor(i * step);
         const endIdx = Math.floor((i + 1) * step);
-        
+
         let minValue = 1.0;
         let maxValue = -1.0;
-        
+
         for (let j = startIdx; j < endIdx && j < data.length; j++) {
           const value = data[j];
           if (value < minValue) minValue = value;
@@ -2392,14 +2342,14 @@ function App() {
 
         const y1 = ((1 + minValue) / 2) * canvas.height;
         const y2 = ((1 + maxValue) / 2) * canvas.height;
-        
+
         ctx.moveTo(i, y1);
         ctx.lineTo(i, y2);
       }
-      
+
       ctx.stroke();
       canvas.dataset.rendered = 'true';
-      
+
     } catch (error) {
       console.error('Error visualizing melody:', error, 'Path:', audioPath, 'Canvas ID:', canvasId);
     }
@@ -2424,22 +2374,22 @@ function App() {
 
   const handleMelodyDragStart = (e: React.DragEvent, melodyId: number, barId: number) => {
     e.stopPropagation();
-    e.dataTransfer.setData('text/plain', JSON.stringify({ 
+    e.dataTransfer.setData('text/plain', JSON.stringify({
       type: 'melody',
-      melodyId, 
-      barId 
+      melodyId,
+      barId
     }));
-    
+
     e.dataTransfer.effectAllowed = 'move';
   };
 
   const handleMelodyDrop = (e: React.DragEvent, targetTime: number) => {
     e.preventDefault();
-    
+
     try {
       const data = JSON.parse(e.dataTransfer.getData('text/plain'));
       if (data.type !== 'melody') return;
-      
+
       const { melodyId, barId } = data;
 
       const wasPlaying = isPlaying;
@@ -2517,9 +2467,8 @@ function App() {
     }));
 
     setBpm(newMelody.bpm);
-    setBpmSeconds(60 / newMelody.bpm);
 
-    setMelodyList(prevList => 
+    setMelodyList(prevList =>
       prevList.map(melody => {
         if (melody.id === changeMelodyModal.melodyId) {
           return {
@@ -2541,8 +2490,8 @@ function App() {
     );
 
     const duration = await getAudioDuration(newMelody.path);
-    
-    setMelodyList(prevList => 
+
+    setMelodyList(prevList =>
       prevList.map(melody => {
         if (melody.id === changeMelodyModal.melodyId) {
           return {
@@ -2589,18 +2538,18 @@ function App() {
     <div className="App">
       <InstrumentsContainer>
         <InstrumentsLogo>
-              <h1>Huskar Studio</h1>
+          <h1>Huskar Studio</h1>
         </InstrumentsLogo>
 
         <InstrumentsBody>
 
           <InstrumentsList>
-          {midiList.map(instrument => (
-            <InstrumentItem key={instrument.id}>
-              <span>{instrument.instrument}</span>
+            {midiList.map(instrument => (
+              <InstrumentItem key={instrument.id}>
+                <span>{instrument.instrument}</span>
 
-                
-                <DeleteInstrumentButton 
+
+                <DeleteInstrumentButton
                   onClick={() => handleDeleteInstrument(instrument.id)}
                 >
                   -
@@ -2624,7 +2573,7 @@ function App() {
                           : item
                       )
                     );
-                    
+
                     const player = samples[instrument.id];
                     if (player) {
                       const volume = newVolume / 50;
@@ -2636,70 +2585,70 @@ function App() {
                     }
                   }}
                 />
-            </InstrumentItem>
-          ))}
-          <InstrumentAddItem>
-            <span></span>
-            <InstrumentAddButton onClick={handleDropdownToggle}>
-              +
-            </InstrumentAddButton>
-            {(dropdownVisible || dropdownAnimating) && (
-              <InstrumentDropdown $isVisible={dropdownVisible}>
-                {AvailibleInstruments.map((instrument, index) => (
-                  <DropdownItem
-                    key={index}
-                    onClick={() => {
-                      handleAddInstrument(instrument);
-                      setDropdownVisible(false);
-                    }}
-                  >
-                    {instrument.name}
-                  </DropdownItem>
-                ))}
-              </InstrumentDropdown>
-            )}
-          </InstrumentAddItem>
+              </InstrumentItem>
+            ))}
+            <InstrumentAddItem>
+              <span></span>
+              <InstrumentAddButton onClick={handleDropdownToggle}>
+                +
+              </InstrumentAddButton>
+              {(dropdownVisible || dropdownAnimating) && (
+                <InstrumentDropdown $isVisible={dropdownVisible}>
+                  {AvailibleInstruments.map((instrument, index) => (
+                    <DropdownItem
+                      key={index}
+                      onClick={() => {
+                        handleAddInstrument(instrument);
+                        setDropdownVisible(false);
+                      }}
+                    >
+                      {instrument.name}
+                    </DropdownItem>
+                  ))}
+                </InstrumentDropdown>
+              )}
+            </InstrumentAddItem>
           </InstrumentsList>
           <InstrumentsMelodyList>
             {melodyList.map(melody => (
               <InstrumentsMelodyItem key={melody.id}>
                 <span>{melody.instrument}</span>
-                  <InstrumentsMelodyButton 
-                    onClick={() => handleOpenChangeMelody(melody.id)}
-                  >
-                    {">"}
-                  </InstrumentsMelodyButton>
-                  <VolumeSlider
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={melody.volume || 50}
-                    onChange={(e) => {
-                      const wasPlaying = isPlaying;
-                      if (wasPlaying) {
-                        handleStop();
-                      }
+                <InstrumentsMelodyButton
+                  onClick={() => handleOpenChangeMelody(melody.id)}
+                >
+                  {">"}
+                </InstrumentsMelodyButton>
+                <VolumeSlider
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={melody.volume || 50}
+                  onChange={(e) => {
+                    const wasPlaying = isPlaying;
+                    if (wasPlaying) {
+                      handleStop();
+                    }
 
-                      const newVolume = parseInt(e.target.value);
-                      setMelodyList(prevList =>
-                        prevList.map(item =>
-                          item.id === melody.id
-                            ? { ...item, volume: newVolume }
-                            : item
-                        )
-                      );
-                      
-                      const player = melodyPlayers[melody.id];
-                      if (player) {
-                        const volume = newVolume / 50;
-                        player.volume.value = 20 * Math.log10(volume);
-                      }
+                    const newVolume = parseInt(e.target.value);
+                    setMelodyList(prevList =>
+                      prevList.map(item =>
+                        item.id === melody.id
+                          ? { ...item, volume: newVolume }
+                          : item
+                      )
+                    );
 
-                      if (wasPlaying) {
-                        setTimeout(handlePlay, 100);
-                      }
-                    }}
-                  />
+                    const player = melodyPlayers[melody.id];
+                    if (player) {
+                      const volume = newVolume / 50;
+                      player.volume.value = 20 * Math.log10(volume);
+                    }
+
+                    if (wasPlaying) {
+                      setTimeout(handlePlay, 100);
+                    }
+                  }}
+                />
               </InstrumentsMelodyItem>
             ))}
           </InstrumentsMelodyList>
@@ -2725,17 +2674,17 @@ function App() {
             </TopSection>
             <TimeBarSection>
               {TimeBarsList?.map((timebar, index) => (
-                <TimeBar 
-                  key={timebar.id} 
+                <TimeBar
+                  key={timebar.id}
                   $index={index}
-                  style={{width: `${100/TimeBarsList.length}%`}}
+                  style={{ width: `${100 / TimeBarsList.length}%` }}
                   onClick={(e) => handleTimeBarClick(e)}
                 >
-                  {Array.from({length: ScreenScale * 4}, (_, i) => (
-                    <TimeBarContentItem 
-                      key={i} 
-                      $index={i} 
-                      style={{width: `${100/(ScreenScale * 4)}%`}}
+                  {Array.from({ length: ScreenScale * 4 }, (_, i) => (
+                    <TimeBarContentItem
+                      key={i}
+                      $index={i}
+                      style={{ width: `${100 / (ScreenScale * 4)}%` }}
                     >
 
                     </TimeBarContentItem>
@@ -2751,11 +2700,11 @@ function App() {
               <TabsRow key={row.id} $rowIndex={row.id}>
                 <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                   {TimeBarsList?.map((timebar, index) => (
-                    <TabsRowTab 
+                    <TabsRowTab
                       key={timebar.id}
                       $index={index}
-                      $position={(100/TimeBarsList.length) * index}
-                      $width={100/TimeBarsList.length}
+                      $position={(100 / TimeBarsList.length) * index}
+                      $width={100 / TimeBarsList.length}
                       onDragOver={handleDragOver}
                       onDrop={(e) => {
                         const data = JSON.parse(e.dataTransfer.getData('text/plain'));
@@ -2811,12 +2760,12 @@ function App() {
                 </div>
               </TabsRow>
             ))}
-            
+
             {contextMenu.visible && (
-              <ContextMenu 
-                style={{ 
-                  left: contextMenu.x, 
-                  top: contextMenu.y 
+              <ContextMenu
+                style={{
+                  left: contextMenu.x,
+                  top: contextMenu.y
                 }}
               >
                 <MenuItem onClick={handleNewTab}>New Tab</MenuItem>
@@ -2835,7 +2784,7 @@ function App() {
             <TabsTimeline $position={tabsTimelinePosition} />
             {melodyList.map((melody) => (
               <MelodyRow key={melody.id}>
-                <div 
+                <div
                   style={{ position: 'relative', width: '100%', height: '100%' }}
                   onDragOver={(e) => {
                     e.preventDefault();
@@ -2851,18 +2800,18 @@ function App() {
                   }}
                 >
                   {TimeBarsList?.map((timebar, index) => (
-                    <TabsRowTab 
+                    <TabsRowTab
                       key={timebar.id}
                       $index={index}
-                      $position={(100/TimeBarsList.length) * index}
-                      $width={100/TimeBarsList.length}
+                      $position={(100 / TimeBarsList.length) * index}
+                      $width={100 / TimeBarsList.length}
                       onDragOver={handleDragOver}
                       onDrop={(e) => handleMelodyDrop(e, index)}
                     />
                   ))}
                   {melody.bars.map((bar, index) => {
                     const barsNeeded = melody.duration / barDurationInSeconds;
-                    
+
                     return (
                       <AudioTab
                         key={`melody-${melody.id}-${bar.id}`}
@@ -2889,10 +2838,10 @@ function App() {
             <TimeBarSection>
               <Timeline $position={timelinePosition} $isPlaying={isPlaying} />
               {TimeBarsList?.map((timebar, index) => (
-                <BottomTimeBar 
-                  key={timebar.id} 
-                  $index={index} 
-                  style={{width: `${100/TimeBarsList.length}%`}}
+                <BottomTimeBar
+                  key={timebar.id}
+                  $index={index}
+                  style={{ width: `${100 / TimeBarsList.length}%` }}
                 >
                   <BottomTimeInfo>
                     <BottomTimeInfoNumber>
@@ -2912,7 +2861,7 @@ function App() {
           <ModalOverlay onClick={handleCloseNotesEdit} />
           <NotesEditModal onClick={e => e.stopPropagation()}>
             <NotesEditToolbar>
-              <EditToolbarButton 
+              <EditToolbarButton
                 onClick={() => {
                   handleCopyNotes();
                 }}
@@ -2925,31 +2874,31 @@ function App() {
             </NotesEditToolbar>
             <NotesContent>
               <NotesInfo>
-              <NotesInfoItem>C</NotesInfoItem>
-              <NotesInfoItem>B</NotesInfoItem>
-              <NotesInfoItem>A#</NotesInfoItem>
-              <NotesInfoItem>A</NotesInfoItem>
-              <NotesInfoItem>G#</NotesInfoItem>
-              <NotesInfoItem>G</NotesInfoItem>
-              <NotesInfoItem>F#</NotesInfoItem>
-              <NotesInfoItem>F</NotesInfoItem>
-              <NotesInfoItem>E</NotesInfoItem>
-              <NotesInfoItem>D#</NotesInfoItem>
-              <NotesInfoItem>D</NotesInfoItem>
-              <NotesInfoItem>C#</NotesInfoItem>
-              <NotesInfoItem>C</NotesInfoItem>
-              <NotesInfoItem>B</NotesInfoItem>
-              <NotesInfoItem>A#</NotesInfoItem>
-              <NotesInfoItem>A</NotesInfoItem>
-              <NotesInfoItem>G#</NotesInfoItem>
-              <NotesInfoItem>G</NotesInfoItem>
-              <NotesInfoItem>F#</NotesInfoItem>
-              <NotesInfoItem>F</NotesInfoItem>
-              <NotesInfoItem>E</NotesInfoItem>
-              <NotesInfoItem>D#</NotesInfoItem>
-              <NotesInfoItem>D</NotesInfoItem>
-              <NotesInfoItem>C#</NotesInfoItem>
-              <NotesInfoItem>C</NotesInfoItem>
+                <NotesInfoItem>C</NotesInfoItem>
+                <NotesInfoItem>B</NotesInfoItem>
+                <NotesInfoItem>A#</NotesInfoItem>
+                <NotesInfoItem>A</NotesInfoItem>
+                <NotesInfoItem>G#</NotesInfoItem>
+                <NotesInfoItem>G</NotesInfoItem>
+                <NotesInfoItem>F#</NotesInfoItem>
+                <NotesInfoItem>F</NotesInfoItem>
+                <NotesInfoItem>E</NotesInfoItem>
+                <NotesInfoItem>D#</NotesInfoItem>
+                <NotesInfoItem>D</NotesInfoItem>
+                <NotesInfoItem>C#</NotesInfoItem>
+                <NotesInfoItem>C</NotesInfoItem>
+                <NotesInfoItem>B</NotesInfoItem>
+                <NotesInfoItem>A#</NotesInfoItem>
+                <NotesInfoItem>A</NotesInfoItem>
+                <NotesInfoItem>G#</NotesInfoItem>
+                <NotesInfoItem>G</NotesInfoItem>
+                <NotesInfoItem>F#</NotesInfoItem>
+                <NotesInfoItem>F</NotesInfoItem>
+                <NotesInfoItem>E</NotesInfoItem>
+                <NotesInfoItem>D#</NotesInfoItem>
+                <NotesInfoItem>D</NotesInfoItem>
+                <NotesInfoItem>C#</NotesInfoItem>
+                <NotesInfoItem>C</NotesInfoItem>
               </NotesInfo>
               <NoteContainer>
                 {Array.from({ length: 25 }, (_, row) => (
@@ -2961,8 +2910,8 @@ function App() {
                     });
 
                     return (
-                      <Note 
-                        key={`${row}-${col}`} 
+                      <Note
+                        key={`${row}-${col}`}
                         $isActive={isActive}
                         $colIndex={col % 8}
                         onClick={() => {
@@ -2979,10 +2928,10 @@ function App() {
       )}
 
       {melodyContextMenu.visible && (
-        <ContextMenu 
-          style={{ 
-            left: melodyContextMenu.x, 
-            top: melodyContextMenu.y 
+        <ContextMenu
+          style={{
+            left: melodyContextMenu.x,
+            top: melodyContextMenu.y
           }}
           onClick={e => e.stopPropagation()}
         >
@@ -3000,7 +2949,7 @@ function App() {
             </ChangeMelodyHeader>
             <ChangeMelodyContent>
               {AvailableMelodies.map((melody, index) => (
-                <MelodyOption 
+                <MelodyOption
                   key={index}
                   onClick={() => handleChangeMelody(melody)}
                 >
